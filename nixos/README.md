@@ -1,20 +1,8 @@
-# NixOS -- blumeops overlay
+# NixOS
 
 NixOS is a Linux distribution based on the purely functional package
 management system Nix.  More information can be found at
 https://nixos.org/nixos and in the manual in doc/manual.
-
-## BlumeOps
-
-The `blumeops` branch provides an overlay specific to my (Erich Blume) personal use. It is not intended for general use,
-so you may prefer to go look at the [upstream NixOS repository](https://github.com/NixOS/nixpkgs) instead.
-
-You can see the changes made in this branch by looking at the [commits](https://github.com/NixOS/nixpkgs/compare/master...eblume:nixpkgs:blumeops).
-
-I intend to try to keep this branch up to date, indeed, updating this branch is how I intend to keep my NixOS system up
-to date. However, I make no guarantees about the stability of this branch, nor do I intend to provide support for it.
-
-**USE AT YOUR OWN RISK!**
 
 ## Testing changes
 
