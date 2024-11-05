@@ -13,11 +13,11 @@
 
 let
   pname = "pythonnet";
-  version = "3.0.3";
+  version = "3.0.4";
   src = fetchPypi {
     pname = "pythonnet";
     inherit version;
-    hash = "sha256-jUsulxWKAjh1+GR0WKWPOIF/T+Oa9gq91rDYrfHXfnU=";
+    hash = "sha256-yS+8/d0WV19+daZDMCJxZYtgbYVX338BMqwkDgPMOo8=";
   };
 
   # This buildDotnetModule is used only to get nuget sources, the actual
@@ -36,6 +36,8 @@ buildPythonPackage {
     substituteInPlace pyproject.toml \
       --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
+
+  buildInputs = dotnet-build.nugetDeps;
 
   nativeBuildInputs = [
     setuptools
@@ -62,7 +64,7 @@ buildPythonPackage {
     dotnet restore \
       -p:ContinuousIntegrationBuild=true \
       -p:Deterministic=true \
-      --source ${dotnet-build.nuget-source}
+      --source "$nugetSource"
   '';
 
   # Rerun this when updating to refresh Nuget dependencies

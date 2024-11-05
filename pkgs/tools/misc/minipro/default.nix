@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "minipro";
-  version = "0.7";
+  version = "0.7.2";
 
   src = fetchFromGitLab {
     owner = "DavidGriffith";
     repo = "minipro";
     rev = version;
-    hash = "sha256-suMGR1vgM2tXsPHInZ6HEDKhDSPlC1ss+wCgbION/rE=";
+    hash = "sha256-NIaBN+T/EzYBhBtBEIvIAmqmksYDDiMJsWm9zCzZOxE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/DavidGriffith/minipro";
-    description = "An open source program for controlling the MiniPRO TL866xx series of chip programmers";
+    description = "Open source program for controlling the MiniPRO TL866xx series of chip programmers";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.bmwalters ];
     mainProgram = "minipro";

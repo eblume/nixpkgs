@@ -5,19 +5,19 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-features-manager";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ToBinio";
     repo = "cargo-features-manager";
     rev = "v${version}";
-    hash = "sha256-ez8WIDHV6/f0Kk6cvzB25LoYBPT+JTzmOWrSxXXzpBc=";
+    hash = "sha256-g4iJ9iZp7vmnSE/P76ocDu/XKeSbPjosB97ojLI30oE=";
   };
 
-  cargoHash = "sha256-G1MBH4c9b/h87QgCleTMnndjWc70KZI+6W4KWaxk28o=";
+  cargoHash = "sha256-O0MQAgOZdiVW6GU69BAn2beDDqNNwijLlmfC7I3Qd0A=";
 
   meta = {
-    description = "A command-line tool for managing Architectural Decision Records";
+    description = "Command-line tool for managing Architectural Decision Records";
     homepage = "https://github.com/ToBinio/cargo-features-manager";
     changelog = "https://github.com/ToBinio/cargo-features-manager/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;

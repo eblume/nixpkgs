@@ -11,26 +11,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "squawk";
-  version = "0.29.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "sbdchd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-YKwoMZkr+UWri4WLm+a44DA8sygy67UkSm160OqDGus=";
+    hash = "sha256-Uc357UspC2O/IxRRTy04jubzhKDRnIAN2CoHvbrGbHg=";
   };
 
-  cargoHash = "sha256-pX87ccAyMkR7qA/k3zLgqYEIhNLFa5yrrVZVtWUKfyc=";
+  cargoHash = "sha256-G0t3wvcp1Dm0ZCDnzTVf1XJ2Dtr0LyrKM1Vvso0IoaA=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libiconv
     openssl
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreFoundation
     Security
   ]);

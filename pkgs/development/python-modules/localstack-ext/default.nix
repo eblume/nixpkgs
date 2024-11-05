@@ -17,12 +17,13 @@
 
 buildPythonPackage rec {
   pname = "localstack-ext";
-  version = "2.3.2";
+  version = "3.7.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Ex5ZPlteDaiyex90QumucVdTTbpp9uWiBrvw1kMr++8=";
+    pname = "localstack_ext";
+    inherit version;
+    hash = "sha256-gd+HyZnezgtKrSKJOYtxUZHTPMrrpKWQHGvaIs9FyVs=";
   };
 
   postPatch = ''
@@ -63,6 +64,6 @@ buildPythonPackage rec {
     description = "Extensions for LocalStack";
     homepage = "https://github.com/localstack/localstack";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

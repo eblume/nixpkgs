@@ -2,7 +2,7 @@
 
 let
   pname = "notesnook";
-  version = "3.0.6";
+  version = "3.0.19";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -16,9 +16,9 @@ let
   src = fetchurl {
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
     hash = {
-      x86_64-linux = "sha256-606+8euLnZdIPUwi+wilJgvnNQNwBCj6AGZFmp9HOWs=";
-      x86_64-darwin = "sha256-A0Rbm6boYI2B3Ne+FczAM3qmtM2KwNWD+C2N0sgWRtg=";
-      aarch64-darwin = "sha256-Jm7rZWEsMspjKrMODGPBGJP0I5fF3aj+WXdBNsmv4jw=";
+      x86_64-linux = "sha256-yCzREyFyGoAPXVVnNX6GUrr83oaPtoNOgZOOd6vJD1Q=";
+      x86_64-darwin = "sha256-WciEpt0vUuXS6YeZkbyFGqQaotXoZkWnkkn5B6/JXwE=";
+      aarch64-darwin = "sha256-iP3Xd/otYEVwU85U2dlFcX9QjDq2CbIqHmcDYVxzqzI=";
     }.${system} or throwSystem;
   };
 
@@ -27,7 +27,7 @@ let
   };
 
   meta = with lib; {
-    description = "A fully open source & end-to-end encrypted note taking alternative to Evernote.";
+    description = "Fully open source & end-to-end encrypted note taking alternative to Evernote";
     longDescription = ''
       Notesnook is a free (as in speech) & open source note taking app
       focused on user privacy & ease of use. To ensure zero knowledge
@@ -74,6 +74,6 @@ let
     '';
   };
 in
-if stdenv.isDarwin
+if stdenv.hostPlatform.isDarwin
 then darwin
 else linux

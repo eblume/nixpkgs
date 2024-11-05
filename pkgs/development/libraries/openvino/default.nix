@@ -5,7 +5,8 @@
 , cudaSupport ? opencv.cudaSupport or false
 
 # build
-, addOpenGLRunpath
+, scons
+, addDriverRunpath
 , autoPatchelfHook
 , cmake
 , git
@@ -17,6 +18,7 @@
 
 # runtime
 , flatbuffers
+, gflags
 , level-zero
 , libusb1
 , libxml2
@@ -25,7 +27,7 @@
 , protobuf
 , pugixml
 , snappy
-, tbb
+, tbb_2021_5
 , cudaPackages
 }:
 
@@ -36,6 +38,9 @@ let
 
   stdenv = gcc12Stdenv;
 
+  # prevent scons from leaking in the default python version
+  scons' = scons.override { inherit python3Packages; };
+
   tbbbind_version = "2_5";
   tbbbind = fetchurl {
     url = "https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/tbbbind_${tbbbind_version}_static_lin_v4.tgz";
@@ -44,6 +49,7 @@ let
 
   python = python3Packages.python.withPackages (ps: with ps; [
     cython
+    distutils
     pybind11
     setuptools
     sphinx
@@ -54,14 +60,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "openvino";
-  version = "2024.1.0";
+  version = "2024.4.1";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-OOSxXpLjmhOgKvrSO6SmY7xLhJSzGXT8w/Y4FnfwTqU=";
+    hash = "sha256-v0PPGFUHCGNWdlTff40Ol2NvaYglb/+L/zZAQujk6lk=";
   };
 
   outputs = [
@@ -70,7 +76,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addDriverRunpath
     autoPatchelfHook
     cmake
     git
@@ -78,6 +84,7 @@ stdenv.mkDerivation rec {
     patchelf
     pkg-config
     python
+    scons'
     shellcheck
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
@@ -91,7 +98,9 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  dontUseCmakeBuildDir = true;
+  dontUseSconsCheck = true;
+  dontUseSconsBuild = true;
+  dontUseSconsInstall = true;
 
   cmakeFlags = [
     "-Wno-dev"
@@ -109,7 +118,8 @@ stdenv.mkDerivation rec {
     (cmakeBool "ENABLE_SAMPLES" false)
 
     # features
-    (cmakeBool "ENABLE_INTEL_CPU" true)
+    (cmakeBool "ENABLE_INTEL_CPU" stdenv.hostPlatform.isx86_64)
+    (cmakeBool "ENABLE_INTEL_NPU" false) # undefined reference to `std::ios_base_library_init()@GLIBCXX_3.4.32'
     (cmakeBool "ENABLE_JS" false)
     (cmakeBool "ENABLE_LTO" true)
     (cmakeBool "ENABLE_ONEDNN_FOR_GPU" false)
@@ -125,14 +135,13 @@ stdenv.mkDerivation rec {
     (cmakeBool "ENABLE_SYSTEM_TBB" true)
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-narrowing";
-
   autoPatchelfIgnoreMissingDeps = [
     "libngraph_backend.so"
   ];
 
   buildInputs = [
     flatbuffers
+    gflags
     level-zero
     libusb1
     libxml2
@@ -140,7 +149,7 @@ stdenv.mkDerivation rec {
     opencv.cxxdev
     pugixml
     snappy
-    tbb
+    tbb_2021_5
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
   ];
@@ -156,7 +165,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Link to OpenCL
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addOpenGLRunpath "$lib"
+      addDriverRunpath "$lib"
     done
   '';
 
@@ -172,8 +181,7 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.openvinotoolkit.org/";
     license = with licenses; [ asl20 ];
     platforms = platforms.all;
-    broken = (stdenv.isLinux && stdenv.isAarch64) # requires scons, then fails with *** Source directory cannot be under variant directory.
-      || stdenv.isDarwin; # Cannot find macos sdk
+    broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
     maintainers = with maintainers; [ tfmoraes ];
   };
 }

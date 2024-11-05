@@ -1,44 +1,43 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, zlib
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typstyle";
-  version = "0.11.24";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "Enter-tainer";
     repo = "typstyle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FLvbY+0TozOWZ+JTX//psNjle5GxcyeZXzMOf4/s1v0=";
+    hash = "sha256-liGGnaUhi3/d4SxpiG/P1wp89brqUJaLyo9/KJvPf9I=";
   };
 
-  cargoHash = "sha256-VA2WNheQltgCaWwtpbEAn2qtlA0fTeEbCjvgkjF+nvw=";
-
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    libgit2
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "reflexo-0.5.0-rc7" = "sha256-XjzHo9HprI1FVPDwNQ0Gw9iTXspo6PUsxz3BOd6qkL0=";
+    };
+  };
 
   # Disabling tests requiring network access
   checkFlags = [
     "--skip=e2e"
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/Enter-tainer/typstyle/blob/${src.rev}/CHANGELOG.md";

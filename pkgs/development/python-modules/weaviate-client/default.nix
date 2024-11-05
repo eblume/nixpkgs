@@ -9,15 +9,14 @@
   httpx,
   pydantic,
   pythonOlder,
-  pythonRelaxDepsHook,
+  requests,
   setuptools-scm,
-  tqdm,
   validators,
 }:
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "4.6.3";
+  version = "4.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +25,7 @@ buildPythonPackage rec {
     owner = "weaviate";
     repo = "weaviate-python-client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-v8I0ovH99q5uYlnbZsQYgL9mg3n9i59W2n6/d9IiKyQ=";
+    hash = "sha256-HSLU9OQMEOCwgxtLj20yJ0Xo9c6SVfMhfVT/F5du17A=";
   };
 
   pythonRelaxDeps = [
@@ -36,7 +35,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     authlib
@@ -45,7 +43,7 @@ buildPythonPackage rec {
     grpcio-tools
     httpx
     pydantic
-    tqdm
+    requests
     validators
   ];
 

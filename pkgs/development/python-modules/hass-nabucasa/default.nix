@@ -8,13 +8,13 @@
   ciso8601,
   cryptography,
   fetchFromGitHub,
+  fetchpatch2,
   pycognito,
   pyjwt,
   pytest-aiohttp,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   snitun,
   syrupy,
@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.81.0";
+  version = "0.82.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -32,12 +32,10 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-61pdl9bjtvC9Fa7jCtSPEz/5PJiANmKqOSSHjK7is2s=";
+    hash = "sha256-hRhRXpiIPrI3umOhsVWLwkSwtEfwevC3fNvJElhKy+I=";
   };
 
   pythonRelaxDeps = [ "acme" ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [ setuptools ];
 

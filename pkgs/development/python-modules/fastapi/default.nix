@@ -3,12 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
 
   # build-system
-  hatchling,
+  pdm-backend,
 
   # dependencies
+  fastapi-cli,
   starlette,
   pydantic,
   typing-extensions,
@@ -16,10 +16,11 @@
   # tests
   dirty-equals,
   flask,
+  inline-snapshot,
   passlib,
+  pyjwt,
   pytest-asyncio,
   pytestCheckHook,
-  python-jose,
   sqlalchemy,
   trio,
 
@@ -39,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.110.2";
+  version = "0.115.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -48,27 +49,24 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "fastapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-qUh5exkXVRcKIO0t4KIOZhhpsftj3BrWaL2asf8RqUI=";
+    hash = "sha256-TewFTbYdWIHcgRH+YNxNEUZVlaUn2aTZ0YFmDPrPZl4=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-    pythonRelaxDepsHook
-  ];
+  build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [
     "anyio"
-    # https://github.com/tiangolo/fastapi/pull/9636
     "starlette"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    fastapi-cli
     starlette
     pydantic
     typing-extensions
   ];
 
-  passthru.optional-dependencies.all =
+  optional-dependencies.all =
     [
       httpx
       jinja2
@@ -89,18 +87,27 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     dirty-equals
     flask
+    inline-snapshot
     passlib
+    pyjwt
     pytestCheckHook
     pytest-asyncio
-    python-jose
     trio
     sqlalchemy
-  ] ++ passthru.optional-dependencies.all ++ python-jose.optional-dependencies.cryptography;
+  ] ++ optional-dependencies.all;
 
   pytestFlagsArray = [
     # ignoring deprecation warnings to avoid test failure from
     # tests/test_tutorial/test_testing/test_tutorial001.py
     "-W ignore::DeprecationWarning"
+    "-W ignore::pytest.PytestUnraisableExceptionWarning"
+  ];
+
+  disabledTests = [
+    # Coverage test
+    "test_fastapi_cli"
+    # ResourceWarning: Unclosed <MemoryObjectSendStream>
+    "test_openapi_schema"
   ];
 
   disabledTestPaths = [

@@ -18,13 +18,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-pD1NKUJmvMTnYKWjRrGnvbA0zVvGpWRIlf/9ovP9Jq4=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   meta = with lib; {
-    description = "A material you color generation tool";
+    description = "Material you color generation tool";
     homepage = "https://github.com/InioX/matugen";
     changelog = "https://github.com/InioX/matugen/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl2Only;

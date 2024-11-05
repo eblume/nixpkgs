@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   hatch-vcs,
@@ -23,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "eventlet";
-  version = "0.35.2";
+  version = "0.37.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eventlet";
     repo = "eventlet";
-    rev = "v${version}";
-    hash = "sha256-jMbCxqIn9f9+16rFwpQdkBHj6NwTNkQxnSVV4qQ1fjM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-R/nRHsz4z4phG51YYDwkGqvnXssGoiJxIPexuhAf0BI=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +47,7 @@ buildPythonPackage rec {
 
   # libredirect is not available on darwin
   # tests hang on pypy indefinitely
-  doCheck = !stdenv.isDarwin && !isPyPy;
+  doCheck = !stdenv.hostPlatform.isDarwin && !isPyPy;
 
   preCheck = lib.optionalString doCheck ''
     echo "nameserver 127.0.0.1" > resolv.conf
@@ -70,7 +69,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/eventlet/eventlet/blob/v${version}/NEWS";
-    description = "A concurrent networking library for Python";
+    description = "Concurrent networking library for Python";
     homepage = "https://github.com/eventlet/eventlet/";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];

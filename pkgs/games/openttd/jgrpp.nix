@@ -2,13 +2,13 @@
 
 openttd.overrideAttrs (oldAttrs: rec {
   pname = "openttd-jgrpp";
-  version = "0.59.0";
+  version = "0.62.0";
 
   src = fetchFromGitHub rec {
     owner = "JGRennison";
     repo = "OpenTTD-patches";
     rev = "jgrpp-${version}";
-    hash = "sha256-90swZyzEdCpWsZb0aZnwRrzGkJT6gef1kMB/q+EXE3M=";
+    hash = "sha256-rl0GKKROteP2orT5Z/DHAQPkJFQu/lddQULYfq/x8w8=";
   };
 
   buildInputs = oldAttrs.buildInputs ++ [ zstd ];

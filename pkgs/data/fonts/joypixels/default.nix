@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The finest emoji you can use legally (formerly EmojiOne)";
+    description = "Finest emoji you can use legally (formerly EmojiOne)";
     longDescription = ''
       Updated for 2023! JoyPixels 8.0 includes 3,702 originally crafted icon
       designs and is 100% Unicode 15.0 compatible. We offer the largest
@@ -108,6 +108,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ toonn jtojnar ];
     # Not quite accurate since it's a font, not a program, but clearly
     # indicates we're not actually building it from source.
-    sourceProvenance = sourceTypes.binaryNativeCode;
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 }

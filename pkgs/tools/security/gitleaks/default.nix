@@ -1,24 +1,26 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   gitleaks,
   installShellFiles,
   testers,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "8.18.2";
+  version = "8.21.2";
 
   src = fetchFromGitHub {
     owner = "zricethezav";
     repo = "gitleaks";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+UPlknAwmIeXlosHBXl3qPREV186lfDZGZG/Zx1rxYs=";
+    hash = "sha256-1MCSGFpjYD4XdES+kJTz/NTN/B00TWMQ1Rmk/nsKf2Q=";
   };
 
-  vendorHash = "sha256-30IJNP4XuV2YNy1TumPUju+GrHFBYi76coy0bJBqDI4=";
+  vendorHash = "sha256-iIgS0fXdiVMYKr3FZTYlCSEqqaH9sxZh1MFry9pGET8=";
 
   ldflags = [
     "-s"
@@ -28,10 +30,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # With v8 the config tests are are blocking
+  # With v8 the config tests are blocking
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ${pname} \
       --bash <($out/bin/${pname} completion bash) \
       --fish <($out/bin/${pname} completion fish) \
@@ -42,6 +44,8 @@ buildGoModule rec {
     package = gitleaks;
     command = "${pname} version";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Scan git repos (or files) for secrets";

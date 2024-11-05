@@ -12,14 +12,14 @@
 }:
 buildPythonPackage rec {
   pname = "python-youtube";
-  version = "0.9.4";
+  version = "0.9.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sns-sdks";
     repo = "python-youtube";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OesJfnXI1w2d5moJyqvrWU3sCxDaqnk1bAhtK6SPjFw=";
+    hash = "sha256-IuVnXVe54D0g+7S+AuTGtBlwcmxHpkk1e9Vt8laEV2c=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A simple Python wrapper around for YouTube Data API";
+    description = "Simple Python wrapper around for YouTube Data API";
     homepage = "https://github.com/sns-sdks/python-youtube";
     changelog = "https://github.com/sns-sdks/python-youtube/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

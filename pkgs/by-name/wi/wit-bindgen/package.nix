@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wit-bindgen";
-  version = "0.26.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wit-bindgen";
     rev = "v${version}";
-    hash = "sha256-A73ONUSW5pDoDB7+U3kOcLWnYxco9brhhL1cRLh2wug=";
+    hash = "sha256-+3tWqNdDZagJa9cLSz1OBaPtCr2F1joYyzB//BPqV34=";
   };
 
-  cargoHash = "sha256-L15XhJ1h9jmIBmtIob5X3EXkVDCqaBCrtI9sojtRUTQ=";
+  cargoHash = "sha256-3TrnSU7qXC8INlEZMbYTNwZsqiKMZ6j7tdGmz3DFl1g=";
 
   # Some tests fail because they need network access to install the `wasm32-unknown-unknown` target.
   # However, GitHub Actions ensures a proper build.
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A language binding generator for WebAssembly interface types";
+    description = "Language binding generator for WebAssembly interface types";
     homepage = "https://github.com/bytecodealliance/wit-bindgen";
     license = licenses.asl20;
     maintainers = with maintainers; [ xrelkd ];

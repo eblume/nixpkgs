@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "kubeswitch";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "danielfoehrKn";
     repo = "kubeswitch";
     rev = version;
-    hash = "sha256-cvMTuiXSpx+ZicN1P3JjGExzW7d51nN1YIpsGArXHzw=";
+    hash = "sha256-P6pMT3TzY5CKFEQZMiwVeOuOCx6/SUpacKAcgjCeE5w=";
   };
 
   vendorHash = null;
@@ -43,7 +43,7 @@ buildGoModule rec {
 
   meta = {
     changelog = "https://github.com/danielfoehrKn/kubeswitch/releases/tag/${version}";
-    description = "The kubectx for operators, a drop-in replacement for kubectx";
+    description = "Kubectx for operators, a drop-in replacement for kubectx";
     license = lib.licenses.asl20;
     homepage = "https://github.com/danielfoehrKn/kubeswitch";
     maintainers = with lib.maintainers; [ bryanasdev000 ];

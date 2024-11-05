@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "files-cli";
-  version = "2.13.53";
+  version = "2.13.148";
 
   src = fetchFromGitHub {
     repo = "files-cli";
     owner = "files-com";
     rev = "v${version}";
-    hash = "sha256-fUOcAluc/H6ZfE14FjLH60cQeUarJ+4PeIb6IkaBwtE=";
+    hash = "sha256-r3pYDBE1YaKuFdxxpDVcMGfX5vOLt4xh3eY0fgLIGk0=";
   };
 
-  vendorHash = "sha256-yVr4u96L+Kgd1Qi2jhvWhwo/EnENwlZgJZtkGOWbteM=";
+  vendorHash = "sha256-/w1uo3SmCUjKp1FcB2NfhrFCLh5zCP+6uf03uwb+SvU=";
 
   ldflags = [
     "-s"
@@ -43,7 +43,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "Files.com Command Line App for Windows, Linux, and macOS.";
+    description = "Files.com Command Line App for Windows, Linux, and macOS";
     homepage = "https://developers.files.com";
     license = licenses.mit;
     maintainers = with maintainers; [ kashw2 ];

@@ -21,7 +21,7 @@
 , libmediaart
 , sqlite
 , systemd
-, tracker
+, tinysparql
 , shared-mime-info
 , gnome
 }:
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     libmediaart
     sqlite
     systemd
-    tracker
+    tinysparql
     shared-mime-info
   ] ++ (with gst_all_1; [
     gstreamer
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
+    description = "Home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
     homepage = "https://gitlab.gnome.org/GNOME/rygel";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchurl,
   substituteAll,
   buildPythonPackage,
   fetchPypi,
@@ -11,9 +10,7 @@
   cryptography,
   pkgconfig, # see nativeBuildInputs
   pkg-config, # see nativeBuildInputs
-  pycparser,
   pytestCheckHook,
-  python,
   pyyaml,
   setuptools-scm,
   tpm2-tss,
@@ -26,24 +23,20 @@ let
 in
 buildPythonPackage rec {
   pname = "tpm2-pytss";
-  version = "2.2.1";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uPFUc0IvN39ZxyF9zRR5FlzOYt+jOTTsl2oni68unv4=";
+    hash = "sha256-IAcRKTeWVvXzw7wW02RhJnKxR9gRkftOufn/n77khBA=";
   };
 
   patches =
     [
       # Fix hardcoded `fapi-config.json` configuration path
       ./fapi-config.patch
-      (fetchurl {
-        url = "https://github.com/tpm2-software/tpm2-pytss/pull/571/commits/b02fdc8e259fe977c1065389c042be69e2985bdf.patch";
-        hash = "sha256-+jZFv+s9p52JxtUcNeJx7ayzKDVtPoQSSGgyZqPDuEc=";
-      })
     ]
     ++ lib.optionals isCross [
       # pytss will regenerate files from headers of tpm2-tss.
@@ -84,8 +77,6 @@ buildPythonPackage rec {
     cryptography
     pyyaml
   ];
-
-  doCheck = true;
 
   nativeCheckInputs = [
     pytestCheckHook

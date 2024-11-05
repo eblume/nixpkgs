@@ -14,17 +14,16 @@
   sqlalchemy,
   pytestCheckHook,
   versioneer,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "pybids";
-  version = "0.16.5";
+  version = "0.17.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5MAp5CYlOh1WxsXOE/LHVNm/K4VGFaLKWaaKYwKjQIM=";
+    hash = "sha256-4MpFXGh2uOHCjMa213CF6QzKCyEQNiN1moyNolEcySQ=";
   };
 
   pythonRelaxDeps = [
@@ -33,7 +32,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
     versioneer
   ] ++ versioneer.optional-dependencies.toml;
@@ -71,7 +69,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/bids-standard/pybids";
     changelog = "https://github.com/bids-standard/pybids/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
     mainProgram = "pybids";
   };
 }

@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "bottle";
-  version = "0.12.25";
+  version = "0.13.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4anJSXCubXELP7RSYpTf64byy0qB7/OkuY3ED7Dl4CE=";
+    hash = "sha256-pIhS3HoFE1PT5N491VkM0l3jcLz9lKciN1YeMUzrDIg=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://bottlepy.org/";
-    description = "A fast and simple micro-framework for small web-applications";
+    description = "Fast and simple micro-framework for small web-applications";
     mainProgram = "bottle.py";
     downloadPage = "https://github.com/bottlepy/bottle";
     license = licenses.mit;

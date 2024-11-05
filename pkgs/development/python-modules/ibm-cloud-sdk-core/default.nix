@@ -14,15 +14,18 @@
 
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
-  version = "3.20.0";
+  version = "3.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-CqbZcEP1ianvRRpx527KBjQTjvGBzlSmoKY1Pe5MXRA=";
+    pname = "ibm_cloud_sdk_core";
+    inherit version;
+    hash = "sha256-G3LvZ13f/aJbCMQ7hLi25U0rXiGvHhvT6FB6LSVxpUQ=";
   };
+
+  pythonRelaxDeps = [ "requests" ];
 
   build-system = [ setuptools ];
 

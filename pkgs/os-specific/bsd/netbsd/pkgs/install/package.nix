@@ -1,4 +1,5 @@
 {
+  lib,
   mkDerivation,
   writeShellScript,
   mtree,
@@ -8,10 +9,10 @@
   makeMinimal,
   mandoc,
   groff,
-  rsync,
   compatIfNeeded,
   fts,
-
+  darwin,
+  stdenv,
 }:
 
 # HACK: to ensure parent directories exist. This emulates GNU
@@ -26,11 +27,9 @@ let
 in
 mkDerivation {
   path = "usr.bin/xinstall";
-  version = "9.2";
-  sha256 = "1f6pbz3qv1qcrchdxif8p5lbmnwl8b9nq615hsd3cyl4avd5bfqj";
   extraPaths = [
-    mtree.src
-    make.src
+    mtree.path
+    make.path
   ];
   nativeBuildInputs = [
     bsdSetupHook
@@ -38,7 +37,6 @@ mkDerivation {
     makeMinimal
     mandoc
     groff
-    rsync
   ];
   skipIncludesPhase = true;
   buildInputs =
@@ -46,7 +44,8 @@ mkDerivation {
     # fts header is needed. glibc already has this header, but musl doesn't,
     # so make sure pkgsMusl.netbsd.install still builds in case you want to
     # remove it!
-    ++ [ fts ];
+    ++ [ fts ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
   installPhase = ''
     runHook preInstall
 

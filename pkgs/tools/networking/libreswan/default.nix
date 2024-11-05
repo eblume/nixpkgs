@@ -45,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "5.0";
+  version = "5.1";
 
   src = fetchurl {
     url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
-    hash = "sha256-ELwK3JC56YGjDf77p9r/IAhB7LmRD51nHxN//BQUKGo=";
+    hash = "sha256-HO6dQSyJeZ64v3EUUA1cFOAUPpVGBWFj7r45YOf0Y3w=";
   };
 
   strictDeps = true;
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     libcap_ng libxcrypt curl nspr nss ldns
     # needed to patch shebangs
     python3 bash
-  ] ++ lib.optional stdenv.isLinux libselinux;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux libselinux;
 
   prePatch = ''
     # Replace wget with curl to save a dependency
@@ -104,11 +104,11 @@ stdenv.mkDerivation rec {
         -i $out/bin/ipsec
   '';
 
-  passthru.tests.libreswan = nixosTests.libreswan;
+  passthru.tests = { inherit (nixosTests) libreswan libreswan-nat; };
 
   meta = with lib; {
     homepage = "https://libreswan.org";
-    description = "A free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
+    description = "Free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
     platforms = platforms.linux ++ platforms.freebsd;
     license = with licenses; [ gpl2Plus mpl20 ] ;
     maintainers = with maintainers; [ afranchuk rnhmjoj ];

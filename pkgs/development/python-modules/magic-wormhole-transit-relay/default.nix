@@ -6,27 +6,32 @@
   autobahn,
   mock,
   twisted,
-  pythonOlder,
-  pythonAtLeast,
+  python,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "magic-wormhole-transit-relay";
-  version = "0.2.1";
+  version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-y0gBtGiQ6v+XKG4OP+xi0dUv/jF9FACDtjNqH7To+l4=";
+    hash = "sha256-LvLvvk008OYkhw+EIln9czuncVLtMQr0NJd0piiEkA4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    # Passing the environment to twistd is necessary to preserve Python's site path.
+    substituteInPlace src/wormhole_transit_relay/test/test_backpressure.py --replace-fail \
+      'reactor.spawnProcess(proto, exe, args)' \
+      'reactor.spawnProcess(proto, exe, args, None)'
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     autobahn
+    setuptools # pkg_resources is referenced at runtime
     twisted
   ];
 
@@ -37,6 +42,13 @@ buildPythonPackage rec {
     mock
     twisted
   ];
+
+  __darwinAllowLocalNetworking = true;
+
+  postCheck = ''
+    # Avoid collision with twisted's plugin cache (#164775).
+    rm "$out/${python.sitePackages}/twisted/plugins/dropin.cache"
+  '';
 
   meta = {
     description = "Transit Relay server for Magic-Wormhole";

@@ -1,28 +1,44 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  setuptools-scm,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytubefix";
-  version = "5.6.3";
-  format = "pyproject";
+  version = "6.17.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-qYNIQhwSZ3ZG3WMY6qCul1OEno1PWgMlfcFSxN3c6aw=";
+  src = fetchFromGitHub {
+    owner = "JuanBindez";
+    repo = "pytubefix";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7AHmRAJ8wL8/V5uQyjdsEUxHQz0n+3pxi9FpMsM1l4U=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # require network access
+    "tests/test_captions.py"
+    "tests/test_cli.py"
+    "tests/test_exceptions.py"
+    "tests/test_extract.py"
+    "tests/test_main.py"
+    "tests/test_query.py"
+    "tests/test_streams.py"
+  ];
 
   pythonImportsCheck = [ "pytubefix" ];
 
   meta = {
     homepage = "https://github.com/JuanBindez/pytubefix";
-    description = "A pytube fork with additional features and fixes";
+    description = "Pytube fork with additional features and fixes";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ roshaen ];
+    maintainers = with lib.maintainers; [ youhaveme9 ];
   };
 }

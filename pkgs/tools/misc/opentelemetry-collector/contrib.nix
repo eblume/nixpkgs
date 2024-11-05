@@ -8,18 +8,18 @@
 
 buildGoModule rec {
   pname = "opentelemetry-collector-contrib";
-  version = "0.101.0";
+  version = "0.110.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-contrib";
     rev = "v${version}";
-    sha256 = "sha256-WdMQnAYAdyvS0uyRzvLnhi1HeoWqmUQSIq6MdcP7NfY=";
+    hash = "sha256-bDtP7EFKus0NJpLccbD+HlzEusc+KAbKWmS/KGthtwY=";
   };
 
-  # proxy vendor to avoid hash missmatches between linux and macOS
+  # proxy vendor to avoid hash mismatches between linux and macOS
   proxyVendor = true;
-  vendorHash = "sha256-LM9Co4XpmyIOTVllhiiON4R8OYTO5OjY9Wn+LrU6PIM=";
+  vendorHash = "sha256-pDDEqtXu167b+J1+k7rC1BE5/ehxzG0ZAkhxqmJpHsg=";
 
   # there is a nested go.mod
   sourceRoot = "${src.name}/cmd/otelcontribcol";
@@ -30,7 +30,7 @@ buildGoModule rec {
   CGO_ENABLED = 0;
 
   # journalctl is required in-$PATH for the journald receiver tests.
-  nativeCheckInputs = lib.optionals stdenv.isLinux [ systemdMinimal ];
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemdMinimal ];
 
   # We don't inject the package into propagatedBuildInputs unless
   # asked to avoid hard-requiring a large package. For the journald

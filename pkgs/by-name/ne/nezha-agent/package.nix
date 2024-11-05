@@ -1,45 +1,64 @@
 {
   lib,
   buildGoModule,
+  stdenv,
   fetchFromGitHub,
-  nezha-agent,
-  testers,
+  versionCheckHook,
 }:
 buildGoModule rec {
   pname = "nezha-agent";
-  version = "0.16.9";
+  version = "0.20.3";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "agent";
-    rev = "v${version}";
-    hash = "sha256-WK9aTKRSpBrqEKje168Gmn6ROLFxE/fuYp10Ywtr4ks=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cLLiJbAr7TxVUNV31Y9TG8ZL4uqBCOnrOr1FM4+1U5c=";
   };
 
-  vendorHash = "sha256-L6QdodI8Ur1H6Zc24KSTYAHfzvW2aq9SYwCVgjvSDII=";
+  vendorHash = "sha256-q6/265vVg6jCnDvs825nni8QFHkJpQz4xxC9MlJH2do=";
 
   ldflags = [
     "-s"
     "-w"
     "-X main.version=${version}"
+    "-X main.arch=${stdenv.hostPlatform.system}"
   ];
 
-  # The test failed due to a geoip request in the sandbox. Remove it to avoid network requirement
-  preCheck = ''
-    rm ./pkg/monitor/myip_test.go
+  checkFlags =
+    let
+      # Skip tests that require network access
+      skippedTests = [
+        "TestLookupIP"
+        "TestGeoIPApi"
+        "TestFetchGeoIP"
+        "TestCloudflareDetection"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  postInstall = ''
+    pushd $out/bin
+    mv agent nezha-agent
+
+    # for compatibility
+    ln -sr nezha-agent agent
+    popd
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = nezha-agent;
-      command = "${nezha-agent}/bin/agent -v";
-    };
-  };
+  doInstallCheck = true;
 
-  meta = with lib; {
+  versionCheckProgramArg = "-v";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  meta = {
     description = "Agent of Nezha Monitoring";
     homepage = "https://github.com/nezhahq/agent";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ moraxyc ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ moraxyc ];
+    mainProgram = "nezha-agent";
   };
 }

@@ -9,23 +9,17 @@
 }:
 
 let
-  botocoreVersion = python3.pkgs.botocore.version;
-  # awscli.version should be pinned to 2 minor versions less than the botocoreVersion
-  versionMinor = toString (lib.toInt (lib.versions.minor botocoreVersion) - 2);
-  versionPatch = lib.versions.patch botocoreVersion;
   self = python3.pkgs.buildPythonApplication rec {
     pname = "awscli";
-    version = "1.${versionMinor}.${versionPatch}"; # N.B: if you change this, change botocore and boto3 to a matching version too
+    # N.B: if you change this, change botocore and boto3 to a matching version too
+    # check e.g. https://github.com/aws/aws-cli/blob/1.33.21/setup.py
+    version = "1.34.30";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-GPcXkl2H0XNaeqt2/qD5+KvW23dRB0X+zLWo9hLigQM=";
+      hash = "sha256-7RdAqXdCnS7dzkGQHJHclR2KuBbSbd+epGMQDbDlYxY=";
     };
-
-    nativeBuildInputs = [
-      python3.pkgs.pythonRelaxDepsHook
-    ];
 
     pythonRelaxDeps = [
       # botocore must not be relaxed
@@ -38,7 +32,7 @@ let
       python3.pkgs.setuptools
     ];
 
-    propagatedBuildInputs = with python3.pkgs; [
+    dependencies = with python3.pkgs; [
       botocore
       s3transfer
       colorama
@@ -64,7 +58,7 @@ let
     installCheckPhase = ''
       runHook preInstallCheck
 
-      $out/bin/aws --version | grep "${botocoreVersion}"
+      $out/bin/aws --version | grep "${python3.pkgs.botocore.version}"
       $out/bin/aws --version | grep "${version}"
 
       runHook postInstallCheck
@@ -82,13 +76,13 @@ let
       };
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://aws.amazon.com/cli/";
       changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
       description = "Unified tool to manage your AWS services";
-      license = licenses.asl20;
+      license = lib.licenses.asl20;
       mainProgram = "aws";
-      maintainers = with maintainers; [ anthonyroussel ];
+      maintainers = with lib.maintainers; [ anthonyroussel ];
     };
   };
 in

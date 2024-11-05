@@ -1,19 +1,46 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, inkscape
-, just
-, xcursorgen
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  inkscape,
+  just,
+  xcursorgen,
+  hyprcursor,
+  xcur2png,
+  catppuccin-whiskers,
+  python3,
+  python3Packages,
 }:
-
 let
   dimensions = {
-    palette = [ "frappe" "latte" "macchiato" "mocha" ];
-    color = [ "Blue" "Dark" "Flamingo" "Green" "Lavender" "Light" "Maroon" "Mauve" "Peach" "Pink" "Red" "Rosewater" "Sapphire" "Sky" "Teal" "Yellow" ];
+    palette = [
+      "frappe"
+      "latte"
+      "macchiato"
+      "mocha"
+    ];
+    color = [
+      "Blue"
+      "Dark"
+      "Flamingo"
+      "Green"
+      "Lavender"
+      "Light"
+      "Maroon"
+      "Mauve"
+      "Peach"
+      "Pink"
+      "Red"
+      "Rosewater"
+      "Sapphire"
+      "Sky"
+      "Teal"
+      "Yellow"
+    ];
   };
   variantName = { palette, color }: palette + color;
   variants = lib.mapCartesianProduct variantName dimensions;
-  version = "0.2.1";
+  version = "1.0.1";
 in
 stdenvNoCC.mkDerivation {
   pname = "catppuccin-cursors";
@@ -23,21 +50,30 @@ stdenvNoCC.mkDerivation {
     owner = "catppuccin";
     repo = "cursors";
     rev = "v${version}";
-    hash = "sha256-aQfbziN5z62LlgVq4CNMXVMmTrzChFgWUMAmO/2/z3Y=";
+    hash = "sha256-l01L0UiE9bgUOMHhs74Bndarw2b6TaJGW/xU/8rfoAk=";
   };
 
-  nativeBuildInputs = [ just inkscape xcursorgen ];
+  nativeBuildInputs = [
+    just
+    inkscape
+    xcursorgen
+    hyprcursor
+    xcur2png
+    catppuccin-whiskers
+    python3
+    python3Packages.pyside6
+  ];
 
   outputs = variants ++ [ "out" ]; # dummy "out" output to prevent breakage
 
-  outputsToInstall = [];
+  outputsToInstall = [ ];
 
   buildPhase = ''
     runHook preBuild
 
     patchShebangs .
 
-    just all
+    just all_with_hyprcursor
 
     runHook postBuild
   '';

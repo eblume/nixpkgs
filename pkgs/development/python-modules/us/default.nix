@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "us";
-  version = "3.1.1";
+  version = "3.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-40eWPo0kocp0N69EP6aFkXdoR7UMhlDY7w61NILnBcI=";
+    hash = "sha256-yyI+hTk9zFFx6tDdISutxH+WZ7I3AP6j5+pfMQ1UUzg=";
   };
 
   postPatch = ''
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "us" ];
 
   meta = with lib; {
-    description = "A package for easily working with US and state metadata";
+    description = "Package for easily working with US and state metadata";
     mainProgram = "states";
     longDescription = ''
       All US states and territories, postal abbreviations, Associated Press style
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/unitedstates/python-us/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

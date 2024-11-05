@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pyprland";
-  version = "2.3.4";
+  version = "2.4.1";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.10";
@@ -16,12 +16,15 @@ python3Packages.buildPythonApplication rec {
     owner = "hyprland-community";
     repo = "pyprland";
     rev = "refs/tags/${version}";
-    hash = "sha256-mwBzLbKB/bO0Yl4VMA3roqiVs0FmmF1vfB+e+xhHe9c=";
+    hash = "sha256-QONnIElYz8UjyLICSm2QGZME5jx+l2Zw4r7kwHW8YEM=";
   };
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
 
   propagatedBuildInputs = with python3Packages; [ aiofiles ];
+  pythonRelaxDeps = [
+    "aiofiles"
+  ];
 
   postInstall = ''
     # file has shebang but cant be run due to a relative import, has proper entrypoint in /bin
@@ -62,7 +65,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     mainProgram = "pypr";
-    description = "An hyperland plugin system";
+    description = "Hyperland plugin system";
     homepage = "https://github.com/hyprland-community/pyprland";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

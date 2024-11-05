@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "quart";
-  version = "0.19.6";
+  version = "0.19.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
     rev = "refs/tags/${version}";
-    hash = "sha256-oR03Qu93F+pcWywbdYgMKIAdohBNezlGz04ws3yGAxs=";
+    hash = "sha256-A23+25bDzK2GlGNTCul6HbsjNujrnhpzTxdnV3Ig028=";
   };
 
   build-system = [ poetry-core ];
@@ -79,7 +79,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "An async Python micro framework for building web applications";
+    description = "Async Python micro framework for building web applications";
     mainProgram = "quart";
     homepage = "https://github.com/pallets/quart/";
     changelog = "https://github.com/pallets/quart/blob/${src.rev}/CHANGES.rst";

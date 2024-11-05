@@ -2,24 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-awscrt";
-  version = "0.20.9";
+  version = "0.23.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "types_awscrt";
     inherit version;
-    hash = "sha256-ZImKL0okaPZiM8uMKcX2bekHz4C6HvW7E1mu8vgbtSE=";
+    hash = "sha256-P9Ht6skj0ZVsDpB8lz+4O9pGW+rn8FRxazcbKT+bX9w=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "awscrt-stubs" ];
 

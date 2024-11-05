@@ -15,7 +15,6 @@
   flask-sockets,
   gunicorn,
   moto,
-  numpy,
   pyramid,
   pytest-asyncio,
   pytestCheckHook,
@@ -34,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "slack-bolt";
-  version = "1.18.1";
+  version = "1.20.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -43,7 +42,7 @@ buildPythonPackage rec {
     owner = "slackapi";
     repo = "bolt-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UwVStemFVA4hgqnSpCKpQGwLYG+p5z7MwFXXnIhrvNk=";
+    hash = "sha256-wDiRQ44ei59I8/2JXv2j9VQFthdyS7sSEZLS7trhdp0=";
   };
 
   postPatch = ''
@@ -64,7 +63,7 @@ buildPythonPackage rec {
 
   dependencies = [ slack-sdk ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async = [
       aiohttp
       websockets
@@ -95,7 +94,7 @@ buildPythonPackage rec {
     docker
     pytest-asyncio
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME="$(mktemp -d)"
@@ -121,7 +120,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "slack_bolt" ];
 
   meta = with lib; {
-    description = "A framework to build Slack apps using Python";
+    description = "Framework to build Slack apps using Python";
     homepage = "https://github.com/slackapi/bolt-python";
     changelog = "https://github.com/slackapi/bolt-python/releases/tag/v${version}";
     license = licenses.mit;

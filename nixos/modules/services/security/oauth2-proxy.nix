@@ -62,7 +62,7 @@ let
   } // lib.optionalAttrs (cfg.passBasicAuth) {
     basic-auth-password = cfg.basicAuthPassword;
   } // lib.optionalAttrs (cfg.htpasswd.file != null) {
-    display-htpasswd-file = cfg.htpasswd.displayForm;
+    display-htpasswd-form = cfg.htpasswd.displayForm;
   } // lib.optionalAttrs tls.enable {
     tls-cert-file = tls.certificate;
     tls-key-file = tls.key;
@@ -586,11 +586,11 @@ in
         wantedBy = [ "multi-user.target" ];
         wants = [ "network-online.target" ] ++ lib.optionals needsKeycloak [ "keycloak.service" ];
         after = [ "network-online.target" ] ++ lib.optionals needsKeycloak [ "keycloak.service" ];
-
+        restartTriggers = [ cfg.keyFile ];
         serviceConfig = {
           User = "oauth2-proxy";
           Restart = "always";
-          ExecStart = "${cfg.package}/bin/oauth2-proxy ${configString}";
+          ExecStart = "${lib.getExe cfg.package} ${configString}";
           EnvironmentFile = lib.mkIf (cfg.keyFile != null) cfg.keyFile;
         };
       };

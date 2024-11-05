@@ -2,23 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
-  proj,
+  fetchpatch,
+  pytestCheckHook,
   pythonOlder,
   substituteAll,
-  cython,
-  pytestCheckHook,
-  mock,
+
   certifi,
+  cython,
+  mock,
   numpy,
-  shapely,
   pandas,
+  proj,
+  shapely,
   xarray,
 }:
 
 buildPythonPackage rec {
   pname = "pyproj";
-  version = "3.6.1";
+  version = "3.7.0";
   format = "setuptools";
   disabled = pythonOlder "3.9";
 
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "pyproj4";
     repo = "pyproj";
     rev = "refs/tags/${version}";
-    hash = "sha256-ynAhu89VpvtQJRkIeVyffQHhd+OvWSiZzaI/7nd6fXA=";
+    hash = "sha256-uCoWmJ0xtbJ/DHts5+9KR6d6p8vmZqDrI4RFjXQn2fM=";
   };
 
   # force pyproj to use ${proj}
@@ -44,11 +45,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ certifi ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     mock
     numpy
-    shapely
     pandas
+    pytestCheckHook
+    shapely
     xarray
   ];
 

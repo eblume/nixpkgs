@@ -21,7 +21,7 @@
 , libgpod
 , libmtp
 , lirc
-, brasero
+, brasero-unwrapped # libdvdcss is not needed for rhythmbox
 , grilo
 , tdb
 , json-glib
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     libgpod
     libmtp
     lirc
-    brasero
+    brasero-unwrapped
     grilo
 
     python3.pkgs.pygobject3
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/rhythmbox";
-    description = "A music playing application for GNOME";
+    description = "Music playing application for GNOME";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.rasendubi ];

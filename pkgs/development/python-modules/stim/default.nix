@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "stim";
-  version = "1.13.0";
+  version = "1.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "quantumlib";
     repo = "Stim";
     rev = "refs/tags/v${version}";
-    hash = "sha256-anJvDHLZ470iNw0U7hq9xGBacDgqYO9ZcmmdCt9pefg=";
+    hash = "sha256-Tx+4FfkMShzTP1QEQVwHEz3FZ5pz3uXK2mlJFLNlTas=";
   };
 
   postPatch = ''
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A tool for high performance simulation and analysis of quantum stabilizer circuits, especially quantum error correction (QEC) circuits";
+    description = "Tool for high performance simulation and analysis of quantum stabilizer circuits, especially quantum error correction (QEC) circuits";
     mainProgram = "stim";
     homepage = "https://github.com/quantumlib/stim";
     changelog = "https://github.com/quantumlib/Stim/releases/tag/v${version}";

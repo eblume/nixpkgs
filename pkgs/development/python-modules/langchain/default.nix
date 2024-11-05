@@ -1,63 +1,56 @@
 {
   lib,
-  aiohttp,
-  async-timeout,
-  azure-core,
-  azure-cosmos,
-  azure-identity,
-  bash,
   buildPythonPackage,
-  chardet,
-  clarifai,
-  cohere,
-  esprima,
   fetchFromGitHub,
-  freezegun,
-  huggingface-hub,
+  pythonOlder,
+
+  # build-system
+  poetry-core,
+
+  # buildInputs
+  bash,
+
+  # dependencies
+  aiohttp,
+  httpx-sse,
   langchain-core,
   langchain-text-splitters,
   langsmith,
-  lark,
-  manifest-ml,
-  nlpcloud,
-  numpy,
-  openai,
-  pandas,
-  poetry-core,
   pydantic,
+  pyyaml,
+  requests,
+  sqlalchemy,
+  tenacity,
+  async-timeout,
+
+  # optional-dependencies
+  numpy,
+
+  # tests
+  freezegun,
+  httpx,
+  lark,
+  pandas,
   pytest-asyncio,
   pytest-mock,
   pytest-socket,
   pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  qdrant-client,
   requests-mock,
-  requests,
   responses,
-  sentence-transformers,
-  sqlalchemy,
   syrupy,
-  tenacity,
-  tiktoken,
   toml,
-  torch,
-  transformers,
-  typer,
 }:
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.2.1";
+  version = "0.3.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain==${version}";
-    hash = "sha256-cLJhdeft9XNLk5njSBaEBSuP31c2VFCJ1ET+ypo6mNY=";
+    hash = "sha256-TaK8lnPxKUqwvKLtQIfzg2l8McQ1fd0g9vocHM0+kjY=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -66,12 +59,14 @@ buildPythonPackage rec {
 
   buildInputs = [ bash ];
 
+  pythonRelaxDeps = [ "tenacity" ];
+
   dependencies = [
     aiohttp
+    httpx-sse
     langchain-core
     langchain-text-splitters
     langsmith
-    numpy
     pydantic
     pyyaml
     requests
@@ -79,48 +74,13 @@ buildPythonPackage rec {
     tenacity
   ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  passthru.optional-dependencies = {
-    llms = [
-      clarifai
-      cohere
-      openai
-      # openlm
-      nlpcloud
-      huggingface-hub
-      manifest-ml
-      torch
-      transformers
-    ];
-    qdrant = [ qdrant-client ];
-    openai = [
-      openai
-      tiktoken
-    ];
-    text_helpers = [ chardet ];
-    clarifai = [ clarifai ];
-    cohere = [ cohere ];
-    docarray = [
-      # docarray
-    ];
-    embeddings = [ sentence-transformers ];
-    javascript = [ esprima ];
-    azure = [
-      azure-identity
-      azure-cosmos
-      openai
-      azure-core
-      # azure-ai-formrecognizer
-      # azure-ai-vision
-      # azure-cognitiveservices-speech
-      # azure-search-documents
-      # azure-ai-textanalytics
-    ];
-    all = [ ];
-    cli = [ typer ];
+  optional-dependencies = {
+    numpy = [ numpy ];
   };
 
   nativeCheckInputs = [
     freezegun
+    httpx
     lark
     pandas
     pytest-asyncio
@@ -164,12 +124,12 @@ buildPythonPackage rec {
     updateScript = langchain-core.updateScript;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain";
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "langchain-server";
   };
 }
